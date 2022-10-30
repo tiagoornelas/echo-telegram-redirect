@@ -1,7 +1,7 @@
 from telethon.sync import TelegramClient
 
-API_ID = 11670226
-API_NAME = "EchoTel"
-API_HASH = "58af5da7ff696e74a7dce4c1accf2a18"
+API_ID = 14308955
+API_NAME = "TelegramSentinel"
+API_HASH = "9052bc9961d1a1c290a4724da180b7a5"
 
 client = TelegramClient(API_NAME, API_ID, API_HASH)
