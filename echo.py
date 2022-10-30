@@ -27,8 +27,16 @@ def echo_listen(from_chats, channel_names_by_id, to_chat):
         try:
             channel_name = get_channel_name(channel_names_by_id, event)
             message = f"{channel_name}: {event.message.message}"
+
             if message != "":
                 await client.send_message(entity=to_chat, message=message, link_preview=False)
+
+            try:
+                if hasattr(event.message, "media"):
+                    await client.send_message(entity=to_chat, file=event.message.media)
+            except:
+                print(f"📝 No image sent! Only text echoed!")
+
         except Exception as e:
             print(f"⚠️ Error handled by Echo!\n\n{e}")
 
