@@ -1,6 +1,6 @@
 from client import client
 from telethon.sync import events
-from message import format_gd_groups_messages, get_roi_by_group_and_time
+from gd.message import format_gd_groups_messages, get_roi_by_group_and_time
 
 listen_to = [
     # GD 12 min

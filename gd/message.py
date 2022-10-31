@@ -2,10 +2,6 @@ import datetime
 import pytz
 
 
-def message_middleware(event):
-    return event
-
-
 def get_now_timerange():
     tz_BR = pytz.timezone("America/Sao_Paulo")
     now = datetime.datetime.now(tz_BR).time()
