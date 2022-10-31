@@ -1,6 +1,6 @@
 from mateus_client import client
 from telethon.sync import events
-from gd.message import format_gd_groups_messages, get_roi_by_group_and_time
+from message import format_gd_groups_messages, get_roi_by_group_and_time
 
 listen_to = [
     # GD 12 min
@@ -42,6 +42,7 @@ def format_message(event):
     else:
         return ""
 
+
 def format_gd_groups_messages(message):
     eight_min = "⏱️ 8 min"
     ten_min = "⏱️ 10 min"
@@ -54,6 +55,7 @@ def format_gd_groups_messages(message):
         return message.replace(ten_min, get_roi_by_group_and_time(ten_min))
     if twelve_min in message:
         return message.replace(twelve_min, get_roi_by_group_and_time(twelve_min))
+
 
 client.start()
 print("🤫 Silence... Echo is listening!")
