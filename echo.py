@@ -1,6 +1,6 @@
 from client import client
 from telethon.sync import events
-from message import format_gd_groups_messages
+from gd.message import format_gd_groups_messages
 
 
 def echo_list_chats():

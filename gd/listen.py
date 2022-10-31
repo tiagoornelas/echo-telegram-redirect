@@ -1,6 +1,6 @@
 from client import client
 from telethon.sync import events
-from message import format_gd_groups_messages
+from gd.message import format_gd_groups_messages, get_roi_by_group_and_time
 
 listen_to = [
     # GD 12 min
@@ -42,6 +42,18 @@ def format_message(event):
     else:
         return ""
 
+def format_gd_groups_messages(message):
+    eight_min = "⏱️ 8 min"
+    ten_min = "⏱️ 10 min"
+    twelve_min = "⏱️ 12 min"
+
+    if eight_min in message:
+        message_header = f"{eight_min} {get_roi_by_group_and_time(eight_min)}"
+        return message.replace(eight_min, message_header)
+    if ten_min in message:
+        return message.replace(ten_min, get_roi_by_group_and_time(ten_min))
+    if twelve_min in message:
+        return message.replace(twelve_min, get_roi_by_group_and_time(twelve_min))
 
 client.start()
 print("🤫 Silence... Echo is listening!")
@@ -51,7 +63,7 @@ print("🤫 Silence... Echo is listening!")
 async def main(event):
     try:
         message = format_message(event)
-        message_with_roi = format_gd_groups_messages(event, channel_name_by_id[event.message.peer_id.channel_id])
+        message_with_roi = format_gd_groups_messages(message, channel_name_by_id[event.message.peer_id.channel_id])
         if message != "":
             await client.send_message(entity=target_channel, message=message_with_roi, link_preview=False)
     except Exception as e:
