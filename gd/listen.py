@@ -1,4 +1,4 @@
-from client import client
+from mateus_client import client
 from telethon.sync import events
 from gd.message import format_gd_groups_messages, get_roi_by_group_and_time
 

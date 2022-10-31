@@ -3,15 +3,13 @@ from echo import echo_listen
 listen_to = [
     # Mestre Manager
     -1001729121754,
-    # Luan FIFA
-    -1001858291401,
     # Alertas FIFA
     -1001793865102,
     # Debugger Chat
     -1001660066336,
 ]
 
-channel_name_by_id = {1729121754: "Mestre Manager", 1858291401: "Luan", 1793865102: "GD", 1660066336: "Debugger"}
+channel_name_by_id = {1729121754: "Mestre Manager", 1793865102: "GD", 1660066336: "Debugger"}
 
 # Entradas - Echo Telegram
 target_channel = -1001790572391
