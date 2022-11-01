@@ -1,5 +1,6 @@
 from mateus_client import client
 from telethon.sync import events
+from telethon.tl import types
 from message import format_gd_groups_messages, get_roi_by_group_and_time
 
 listen_to = [
@@ -20,6 +21,13 @@ listen_to = [
 target_channel = -1001790572391
 
 channel_name_by_id = {1727812180: "⏱️12", 1658824373: "⏱️10", 1552985975: "⏱️8", 1660066336: "Debugger"}
+
+results_link_by_id = {
+    1727812180: "https://www.totalcorner.com/league/view/12985",
+    1658824373: "https://www.totalcorner.com/league/view/13321",
+    1552985975: "https://www.totalcorner.com/league/view/12995",
+    1660066336: "https://www.totalcorner.com/league/view/12985",
+}
 
 
 def get_channel_name(event):
@@ -56,7 +64,8 @@ def format_message(event):
     # Specific logic for tip messages
     if "bet365.com" in event.message.message:
         custom_str = event.message.message.split("💎 Green Diamond 💎")[0]
-        return f"{channel_str}: {custom_str}"
+        result_str = f"ℹ [Resultados]({results_link_by_id[event.message.peer_id.channel_id]})"
+        return f"{channel_str}: {custom_str}{result_str}"
     else:
         # Checks for empty messages to avoid ":" after channel name when only images is sent
         if event.message.message != "":
@@ -74,7 +83,7 @@ async def main(event):
     try:
         message = format_message(event)
         # Sends text only when there is no image
-        if event.message.media is None:
+        if event.message.media is None or isinstance(event.message.media, types.MessageMediaWebPage):
             return await client.send_message(entity=target_channel, message=message, link_preview=False)
         # Sends image with caption
         else:
