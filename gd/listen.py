@@ -1,5 +1,6 @@
-from mateus_client import client
+from client import client
 from telethon.sync import events
+from telethon.tl import types
 from message import format_gd_groups_messages, get_roi_by_group_and_time
 
 listen_to = [
@@ -9,52 +10,62 @@ listen_to = [
     -1001658824373,
     # GD 8 min
     -1001552985975,
+    # Debugger,
+    # -1001660066336
 ]
 
-# Alertas FIFA
+# GD FIFA
 target_channel = -1001793865102
 
-channel_name_by_id = {1727812180: "⏱️ 12 min", 1658824373: "⏱️ 10 min", 1552985975: "⏱️ 8 min"}
+channel_name_by_id = {1727812180: "⏱️12", 1658824373: "⏱️10", 1552985975: "⏱️8"}
+
+results_link_by_id = {
+    1727812180: "https://www.totalcorner.com/league/view/12985",
+    1658824373: "https://www.totalcorner.com/league/view/13321",
+    1552985975: "https://www.totalcorner.com/league/view/12995",
+}
 
 
 def get_channel_name(event):
     try:
         channel_id = event.message.peer_id.channel_id
-        return f"{channel_name_by_id[channel_id]}\n\n"
+        return channel_name_by_id[channel_id]
     except:
         return ""
 
 
+def format_attention_message(event):
+    eight_min = 1552985975
+    ten_min = 1658824373
+    twelve_min = 1727812180
+
+    channel_name = get_channel_name(event)
+
+    if event.message.peer_id.channel_id == eight_min:
+        return f"💎 Atentos 💎\n\n{channel_name}: {get_roi_by_group_and_time(eight_min)}"
+    if event.message.peer_id.channel_id == ten_min:
+        return f"💎 Atentos 💎\n\n{channel_name}: {get_roi_by_group_and_time(ten_min)}"
+    if event.message.peer_id.channel_id == twelve_min:
+        return f"💎 Atentos 💎\n\n{channel_name}: {get_roi_by_group_and_time(twelve_min)}"
+
+
 def format_message(event):
-    # Return nothing for empty messages (such as images)
-    if event.message.message == "":
-        return
-
-    # Avoid any checks when attention message
+    # Specific logic for attention messages
     if "Atentos" in event.message.message:
-        return event.message.message
+        return format_attention_message(event)
 
-    # Avoid messages without tips
+    channel_str = get_channel_name(event)
+    # Specific logic for tip messages
     if "bet365.com" in event.message.message:
-        channel_str = get_channel_name(event)
         custom_str = event.message.message.split("💎 Green Diamond 💎")[0]
-        return f"{channel_str}{custom_str}"
+        result_str = f"ℹ [Resultados]({results_link_by_id[event.message.peer_id.channel_id]})"
+        return f"{channel_str}: {custom_str}{result_str}"
     else:
-        return ""
-
-
-def format_gd_groups_messages(message):
-    eight_min = "⏱️ 8 min"
-    ten_min = "⏱️ 10 min"
-    twelve_min = "⏱️ 12 min"
-
-    if eight_min in message:
-        message_header = f"{eight_min} {get_roi_by_group_and_time(eight_min)}"
-        return message.replace(eight_min, message_header)
-    if ten_min in message:
-        return message.replace(ten_min, get_roi_by_group_and_time(ten_min))
-    if twelve_min in message:
-        return message.replace(twelve_min, get_roi_by_group_and_time(twelve_min))
+        # Checks for empty messages to avoid ":" after channel name when only images is sent
+        if event.message.message != "":
+            return f"{channel_str}: {event.message.message}"
+        else:
+            return channel_str
 
 
 client.start()
@@ -65,9 +76,12 @@ print("🤫 Silence... Echo is listening!")
 async def main(event):
     try:
         message = format_message(event)
-        message_with_roi = format_gd_groups_messages(message, channel_name_by_id[event.message.peer_id.channel_id])
-        if message != "":
-            await client.send_message(entity=target_channel, message=message_with_roi, link_preview=False)
+        # Sends text only when there is no image
+        if event.message.media is None or isinstance(event.message.media, types.MessageMediaWebPage):
+            return await client.send_message(entity=target_channel, message=message, link_preview=False)
+        # Sends image with caption
+        else:
+            return await client.send_file(entity=target_channel, file=event.message.media, caption=message)
     except Exception as e:
         print(f"⚠️ Error handled by Echo!\n\n{e}")
 
