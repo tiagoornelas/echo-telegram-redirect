@@ -58,7 +58,7 @@ def format_message(event):
     # Specific logic for tip messages
     if "bet365.com" in event.message.message:
         custom_str = event.message.message.split("💎 Green Diamond 💎")[0]
-        result_str = f"ℹ [Resultados]({results_link_by_id[event.message.peer_id.channel_id]})"
+        result_str = f"ℹ Resultados: {results_link_by_id[event.message.peer_id.channel_id]}"
         return f"{channel_str}: {custom_str}{result_str}"
     else:
         # Checks for empty messages to avoid ":" after channel name when only images is sent
