@@ -15,7 +15,12 @@ def get_channel_name(channel_names_by_id, event):
         channel_id = event.message.peer_id.channel_id
         return channel_names_by_id[channel_id]
     except:
-        return ""
+        print(event.message)
+        chat_id = event.message.chat_id
+        try:
+            return channel_names_by_id[chat_id]
+        except:
+            return ""
 
 
 def echo_listen(from_chats, channel_names_by_id, to_chat):
