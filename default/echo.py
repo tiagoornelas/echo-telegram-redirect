@@ -34,7 +34,7 @@ def echo_listen(from_chats, channel_names_by_id, to_chat):
             message = f"{channel_name}: {event.message.message}"
 
             if "tipmanager.net" in message:
-                message = f"{message.split('http://tipmanager.link')[0]}Links:\n[8 min](https://www.bet365.com/#/AC/B1/C1/D1002/E47578773/G938)\n[10 min](https://www.bet365.com/#/AC/B1/C1/D1002/E72260052/G938/)\n[12 min](https://www.bet365.com/#/AC/B1/C1/D1002/E71755872/G938)"
+                message = f"{message.split('http')[0]}Links:\n[8 min](https://www.bet365.com/#/AC/B1/C1/D1002/E47578773/G938)\n[10 min](https://www.bet365.com/#/AC/B1/C1/D1002/E72260052/G938/)\n[12 min](https://www.bet365.com/#/AC/B1/C1/D1002/E71755872/G938)"
             # Sends text only when there is no image
             if event.message.media is None or isinstance(event.message.media, types.MessageMediaWebPage):
                 await client.send_message(entity=to_chat, message=message, link_preview=False)
