@@ -17,9 +17,9 @@ def get_now_timerange():
 
 def get_roi_by_group_and_time(group_string):
     data = {
-        1552985975: {"daybreak": "+3,52% ⛔", "morning": "+1,60% ⛔", "afternoon": "+6,13% ✅", "evening": "+10,70% ⭐"},
-        1658824373: {"daybreak": "+4,80% ⛔", "morning": "+4,52% ⛔", "afternoon": "+8,02% ✅", "evening": "+12,09% ⭐"},
-        1727812180: {"daybreak": "+11,70% ⭐", "morning": "+8,87% ✅", "afternoon": "+1,32% ⛔", "evening": "+5,30% ✅"},
+        1552985975: {"daybreak": "+5,59% ✅", "morning": "+0,89% ⛔", "afternoon": "+4,34% ⛔", "evening": "+6,33% ✅"},
+        1658824373: {"daybreak": "+4,16% ⛔", "morning": "+4,08% ⛔", "afternoon": "+5,20% ✅", "evening": "+9,75% ⭐"},
+        1727812180: {"daybreak": "+10,58% ⭐", "morning": "+5,78% ✅", "afternoon": "+1,15% ⛔", "evening": "+5,78% ✅"},
     }
 
     current_timerange = get_now_timerange()

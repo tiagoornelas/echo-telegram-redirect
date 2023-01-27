@@ -19,12 +19,6 @@ target_channel = -1001793865102
 
 channel_name_by_id = {1727812180: "⏱️12", 1658824373: "⏱️10", 1552985975: "⏱️8"}
 
-results_link_by_id = {
-    1727812180: "https://www.totalcorner.com/league/view/12985",
-    1658824373: "https://www.totalcorner.com/league/view/13321",
-    1552985975: "https://www.totalcorner.com/league/view/12995",
-}
-
 
 def get_channel_name(event):
     try:
@@ -58,8 +52,7 @@ def format_message(event):
     # Specific logic for tip messages
     if "bet365.com" in event.message.message:
         custom_str = event.message.message.split("💎 Green Diamond 💎")[0]
-        result_str = f"ℹ Resultados: {results_link_by_id[event.message.peer_id.channel_id]}"
-        return f"{channel_str}: {custom_str}{result_str}"
+        return f"{channel_str}: {custom_str}"
     else:
         # Checks for empty messages to avoid ":" after channel name when only images is sent
         if event.message.message != "":
