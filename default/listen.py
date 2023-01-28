@@ -6,7 +6,7 @@ listen_to = [
     # Mestre Manager
     -1001729121754,
     # Alertas FIFA
-    -1001793865102,
+    # -1001793865102,
     # Debugger Chat
     -1001660066336,
 ]
