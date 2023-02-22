@@ -33,6 +33,9 @@ def echo_listen(from_chats, channel_names_by_id, to_chat):
             channel_name = get_channel_name(channel_names_by_id, event)
             message = f"{channel_name}: {event.message.message}"
 
+            # Avoids redirection from SportsbetsIO tips
+            if "SBIO" in message:
+                return
             if "tipmanager.net" in message:
                 message = f"{message.split('———')[0]}"
             # Sends text only when there is no image
