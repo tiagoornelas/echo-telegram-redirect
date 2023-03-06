@@ -30,7 +30,7 @@ async def send_message_to_dynamic_channels(default_chat, ornelas_source_id, orne
         else:
             await client.send_message(entity=default_chat, message=message, link_preview=False)
     except Exception as e:
-            print(f"⚠️ Error handled by Echo!\n\n{e}")
+            print(f"⚠️ Error handled by Echo inside function Send Msg 2 Dynamic Channels!\n\n{e}")
 
 
 def echo_listen(from_chats, channel_names_by_id, default_chat, ornelas_source_channel_id, ornelas_chat):

@@ -3,6 +3,8 @@ from echo import echo_listen
 listen_to = [
     # Mestre Manager
     -1001729121754,
+    # Ornelas Bot
+    2022773493,
     # Debugger Chat
     -1001660066336,
 ]
