@@ -22,8 +22,18 @@ def get_channel_name(channel_names_by_id, event):
         except:
             return ""
 
+async def send_message_to_dynamic_channels(default_chat, ornelas_source_id, ornelas_chat, event, message):
+    try:
+        channel_id = event.message.peer_id.channel_id
+        if channel_id == ornelas_source_id:
+            await client.send_message(entity=ornelas_chat, message=message, link_preview=False)
+        else:
+            await client.send_message(entity=default_chat, message=message, link_preview=False)
+    except Exception as e:
+            print(f"⚠️ Error handled by Echo!\n\n{e}")
 
-def echo_listen(from_chats, channel_names_by_id, to_chat):
+
+def echo_listen(from_chats, channel_names_by_id, default_chat, ornelas_source_channel_id, ornelas_chat):
     client.start()
     print("🤫 Silence... Echo is listening!")
 
@@ -43,10 +53,10 @@ def echo_listen(from_chats, channel_names_by_id, to_chat):
                 message = message.replace("Tip Manager", "DataAPI")
             # Sends text only when there is no image
             if event.message.media is None or isinstance(event.message.media, types.MessageMediaWebPage):
-                await client.send_message(entity=to_chat, message=message, link_preview=False)
+                await send_message_to_dynamic_channels(default_chat, ornelas_source_id, ornelas_chat, message, event)
             # Sends image with caption
-            else:
-                return await client.send_file(entity=to_chat, file=event.message.media, caption=message)
+            # else:
+            #     return await client.send_file(entity=default_chat, file=event.message.media, caption=message)
         except Exception as e:
             print(f"⚠️ Error handled by Echo!\n\n{e}")
 
