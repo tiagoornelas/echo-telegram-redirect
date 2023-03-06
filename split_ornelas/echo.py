@@ -24,8 +24,9 @@ def get_channel_name(channel_names_by_id, event):
 
 async def send_message_to_dynamic_channels(default_chat, ornelas_source_id, ornelas_chat, message, event):
     try:
-        channel_id = event.message.peer_id.channel_id
-        if channel_id == ornelas_source_id:
+        # Since Ornelas Bot's messages comes from a bot which is a chat and not a channel, the event does not have
+        # channel_id, instead it has user_id. So it checks if message comes from an user and userId is the source
+        if hasattr(event.message.peer_id, "user_id") and event.message.peer_id.user_id == ornelas_source_id:
             await client.send_message(entity=ornelas_chat, message=message, link_preview=False)
         else:
             await client.send_message(entity=default_chat, message=message, link_preview=False)
