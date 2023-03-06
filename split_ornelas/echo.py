@@ -41,8 +41,12 @@ def echo_listen(from_chats, channel_names_by_id, default_chat, ornelas_source_ch
     @client.on(events.NewMessage(chats=from_chats))
     async def main(event):
         try:
-            channel_name = get_channel_name(channel_names_by_id, event)
-            message = f"{channel_name}: {event.message.message}"
+            # Does not write channel's name in front of Ornelas Bot's messages
+            if hasattr(event.message.peer_id, "user_id") and event.message.peer_id.user_id == ornelas_source_channel_id:
+                message = event.message.message
+            else:
+                channel_name = get_channel_name(channel_names_by_id, event)
+                message = f"{channel_name}: {event.message.message}"
 
             # Splits Tip Managers default footer
             if "tipmanager.net" in message:
