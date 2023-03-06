@@ -46,11 +46,6 @@ def echo_listen(from_chats, channel_names_by_id, default_chat, ornelas_source_ch
             # Splits Tip Managers default footer
             if "tipmanager.net" in message:
                 message = f"{message.split('———')[0]}"
-            # Sanitizes any messages to avoid leaking Tip Manager data sourcing
-            if "tipmanager" in message or "TipManager" in message or "Tip Manager" in message:
-                message = message.replace("tipmanager", "DataAPI")
-                message = message.replace("TipManager", "DataAPI")
-                message = message.replace("Tip Manager", "DataAPI")
             # Sends text only when there is no image
             if event.message.media is None or isinstance(event.message.media, types.MessageMediaWebPage):
                 await send_message_to_dynamic_channels(default_chat, ornelas_source_channel_id, ornelas_chat, message, event)
