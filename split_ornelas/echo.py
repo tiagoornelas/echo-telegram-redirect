@@ -22,7 +22,7 @@ def get_channel_name(channel_names_by_id, event):
         except:
             return ""
 
-async def send_message_to_dynamic_channels(default_chat, ornelas_source_id, ornelas_chat, event, message):
+async def send_message_to_dynamic_channels(default_chat, ornelas_source_id, ornelas_chat, message, event):
     try:
         channel_id = event.message.peer_id.channel_id
         if channel_id == ornelas_source_id:
