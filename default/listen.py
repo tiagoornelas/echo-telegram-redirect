@@ -13,6 +13,6 @@ channel_name_by_id = {2022773493: "Ornelas Bot", 1729121754: "Mestre Manager", 1
 ornelas_source_channel_id = 2022773493
 
 default_target_channel = -1001790572391
-ornelas_target_channel = -1001790572391
+ornelas_target_channel = -1001684445367
 
 echo_listen(listen_to, channel_name_by_id, default_target_channel, ornelas_source_channel_id, ornelas_target_channel)
