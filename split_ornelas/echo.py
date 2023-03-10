@@ -55,8 +55,8 @@ def echo_listen(from_chats, channel_names_by_id, default_chat, ornelas_source_ch
             if event.message.media is None or isinstance(event.message.media, types.MessageMediaWebPage):
                 await send_message_to_dynamic_channels(default_chat, ornelas_source_channel_id, ornelas_chat, message, event)
             # Sends image with caption
-            # else:
-            #     return await client.send_file(entity=default_chat, file=event.message.media, caption=message)
+            else:
+                return await client.send_file(entity=default_chat, file=event.message.media, caption=message)
         except Exception as e:
             print(f"⚠️ Error handled by Echo!\n\n{e}")
 
