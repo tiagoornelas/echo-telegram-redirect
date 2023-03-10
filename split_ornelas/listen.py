@@ -1,15 +1,27 @@
 from echo import echo_listen
 
 listen_to = [
-    # Mestre Manager
-    -1001729121754,
+    # SBP - Staho
+    -1001247444492,
+    # SBP - Basil
+    -1001657959018,
+    # SBP
+    -1001397538920,
+    -1001303952700,
     # Ornelas Bot
     2022773493,
     # Debugger Chat
     -1001660066336,
 ]
 
-channel_name_by_id = {2022773493: "Ornelas Bot", 1729121754: "Mestre Manager", 1793865102: "GD", 1660066336: "Debugger"}
+channel_name_by_id = {
+    2022773493: "Ornelas Bot",
+    1247444492: "SBP - Staho",
+    1657959018: "SBP - Basil",
+    1397538920: "SBP - Resultados",
+    1303952700: "SBP - Anúncios",
+    1660066336: "Debugger"
+}
 
 # Entradas - Echo Telegram
 ornelas_source_channel_id = 2022773493
