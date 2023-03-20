@@ -10,7 +10,7 @@ from pymongo import MongoClient
 
 def log_app_initialization(chat_settings):
     print("Echo Sentinel running...")
-    print("Listening to chats:")
+    print("Listening to Telegram chats:")
     for chat in chat_settings['source_chats_titles']:
         print(f"-> {chat}")
     print("Sending to chat:")
@@ -21,6 +21,8 @@ def log_app_initialization(chat_settings):
 
 def log_sent_message(message, chat_settings):
     db.messages.insert_one({
+        'from_app': 'Telegram',
+        'to_app': 'Telegram',
         'from': chat_settings['source_chats_titles'],
         'to': chat_settings['recipient_chat_title'],
         'message': message,
@@ -29,6 +31,8 @@ def log_sent_message(message, chat_settings):
 
 def log_error(message, chat_settings, error):
     db.errors.insert_one({
+        'from_app': 'Telegram',
+        'to_app': 'Telegram',
         'from': chat_settings['source_chats_titles'],
         'to': chat_settings['recipient_chat_title'],
         'message': message,
@@ -103,6 +107,6 @@ async def main(event):
         else:
             return await client.send_file(entity=chat_settings['recipient_chat'], file=event.message.media, caption=message)
     except Exception as e:
-        log_error(event.message.message, chat_settings, e.message)
+        log_error(event.message.message, chat_settings, e)
 
 client.run_until_disconnected()

@@ -9,6 +9,7 @@ In order to run, you'll need to create a `.env` file with the following keys:
 ```
 TELEGRAM_API_ID
 TELEGRAM_API_HASH
+TELEGRAM_BOT_TOKEN
 MONGO_URL
 ```
 ## Duplicate Key Error
