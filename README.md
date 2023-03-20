@@ -3,12 +3,14 @@
 Echo is a telegram redirect service for redirecting and manipulating telegram
 messages
 
-## Sui Generis Branches
+## Environment Variables
 
-The branch `mateus_api_client` was made specific for treating multiple GD groups
-from Mateus Araújo' Telgram API. As needed, more sui generis branches can be
-created to fulfill specific needs.
-
+In order to run, you'll need to create a `.env` file with the following keys:
+```
+TELEGRAM_API_ID
+TELEGRAM_API_HASH
+MONGO_URL
+```
 ## Duplicate Key Error
 
 In order to avoid this duplicated key error, if you want to run two Echo
