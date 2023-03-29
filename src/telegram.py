@@ -20,6 +20,7 @@ def log_app_initialization(chat_settings):
 
 
 def log_sent_message(message, chat_settings):
+    print(f"{datetime.datetime.utcnow()} - {message}")
     db.messages.insert_one({
         'from_app': 'Telegram',
         'to_app': 'Telegram',
@@ -30,6 +31,7 @@ def log_sent_message(message, chat_settings):
     })
 
 def log_error(message, chat_settings, error):
+    print(f"{datetime.datetime.utcnow()} - ERROR: {error}")
     db.errors.insert_one({
         'from_app': 'Telegram',
         'to_app': 'Telegram',

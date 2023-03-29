@@ -21,21 +21,24 @@ const mongoConnection = () => {
     });
 };
 
-const logSentMessage = (message, chatSettings) =>
-  mongoConnection().then(db =>
+const logSentMessage = (message, chatSettings) => {
+  console.log(`${new Date()} - ${message.text}`);
+  return mongoConnection().then(db =>
     db.collection("messages").insertOne({
       from_app: "Whatsapp",
       to_app: "Telegram",
-      from: chatSettings.sourceChat,
+      from: chatSettings.sourceChatsTitle,
       to: TELEGRAM_RECIPIENT_CHAT_ID,
       bot_token: TELEGRAM_BOT_TOKEN,
       message: message.text,
       datetime: new Date()
     })
   );
+};
 
-const logError = error =>
-  mongoConnection().then(db =>
+const logError = error => {
+  console.log(`${new Date()} - ERROR: ${error}`);
+  return mongoConnection().then(db =>
     db.collection("errors").insertOne({
       from_app: "Whatsapp",
       to_app: "Telegram",
@@ -43,6 +46,7 @@ const logError = error =>
       datetime: new Date()
     })
   );
+};
 
 const telegramBot = new TeleBot(TELEGRAM_BOT_TOKEN);
 telegramBot.start();
@@ -62,8 +66,8 @@ wa.create({
 
 function logAppInitialization(chatSettings) {
   console.log("Echo Sentinel running...");
-  console.log("Listening to Whatsapp chat:");
-  console.log(`-> ${chatSettings.sourceChat}`);
+  console.log("Listening to Whatsapp chats:");
+  chatSettings.sourceChatsTitle.forEach(sourceChat => console.log(`-> ${sourceChat}`));
 }
 
 async function start(waClient) {
@@ -83,7 +87,7 @@ async function start(waClient) {
     inquirer
       .prompt([
         {
-          type: "list",
+          type: "checkbox",
           message: "Select source chats",
           name: "source",
           choices: whatsappChats.array
@@ -91,14 +95,14 @@ async function start(waClient) {
       ])
       .then(answers => {
         const chatSettings = {
-          sourceChat: whatsappChats.dict[answers.source],
-          sourceChatTitle: whatsappChats.array.find(chat => chat.id === whatsappChats.dict[answers.source])
+          sourceChats: answers.source.map(chatName => whatsappChats.dict[chatName]),
+          sourceChatsTitle: answers.source
         };
 
         logAppInitialization(chatSettings);
 
         waClient.onMessage(async message => {
-          if (message.chatId === chatSettings.sourceChat) {
+          if (chatSettings.sourceChats.includes(message.chatId)) {
             if (message.mimetype && message.mimetype.includes("image")) {
               logSentMessage(message, chatSettings);
               const mediaData = await wa.decryptMedia(message);
