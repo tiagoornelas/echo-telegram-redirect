@@ -48,8 +48,8 @@ def sanitize_tipmanager_messages(message):
     message = f"{message.replace('tipmanager', 'dataapi')}"
     message = f"{message.split('———')[0]}"
     if 'https://bot.' in message:
-        links = f"[Battle](https://www.bet365.com/#/AC/B1/C1/D1002/E47578773/G938/)|[Arena](https://www.bet365.com/#/AC/B1/C1/D1002/E72260052/G938/)|[GT](https://www.bet365.com/#/AC/B1/C1/D1002/E71755872/G938/)"
-        message = f"{message.split('https://bot.')[0]}\n\n{links}"
+        links = f"[Battle 8'](https://www.bet365.com/#/AC/B1/C1/D1002/E47578773/G938/) | [Arena 10'](https://www.bet365.com/#/AC/B1/C1/D1002/E72260052/G938/) | [GT 12'](https://www.bet365.com/#/AC/B1/C1/D1002/E71755872/G938/)"
+        message = f"{message.split('https://bot.')[0]}\n{links}"
     return message
 
 def prompt_for_chat_settings(client):
