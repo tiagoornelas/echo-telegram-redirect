@@ -48,7 +48,7 @@ def sanitize_tipmanager_messages(message):
     message = f"{message.replace('tipmanager', 'dataapi')}"
     message = f"{message.split('———')[0]}"
     if 'https://bot.' in message:
-        links = f"[Battle 8'](https://www.bet365.com/#/AC/B1/C1/D1002/E47578773/G938/) | [Arena 10'](https://www.bet365.com/#/AC/B1/C1/D1002/E72260052/G938/) | [GT 12'](https://www.bet365.com/#/AC/B1/C1/D1002/E71755872/G938/)"
+        links = f"[Battle 8'](https://www.bet365.com/#/AC/B1/C1/D1002/E47578773/G938/) | [Adriatic 10'](https://www.bet365.com/#/AC/B1/C1/D1002/E90158949/G938/) | [GT 12'](https://www.bet365.com/#/AC/B1/C1/D1002/E71755872/G938/)"
         message = f"{message.split('https://bot.')[0]}{links}"
     return message
 
