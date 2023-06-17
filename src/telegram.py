@@ -18,38 +18,22 @@ def log_app_initialization(chat_settings):
     if chat_settings['should_sanitize']:
         print("Tip Manager's messages sanitizer is enabled")
 
-
-def log_sent_message(message, chat_settings):
-    print(f"{datetime.datetime.utcnow()} - {message}")
-    db.messages.insert_one({
-        'from_app': 'Telegram',
-        'to_app': 'Telegram',
-        'from': chat_settings['source_chats_titles'],
-        'to': chat_settings['recipient_chat_title'],
-        'message': message,
-        'datetime': datetime.datetime.utcnow()
-    })
-
-def log_error(message, chat_settings, error):
-    print(f"{datetime.datetime.utcnow()} - ERROR: {error}")
-    db.errors.insert_one({
-        'from_app': 'Telegram',
-        'to_app': 'Telegram',
-        'from': chat_settings['source_chats_titles'],
-        'to': chat_settings['recipient_chat_title'],
-        'message': message,
-        'error': error,
-        'datetime': datetime.datetime.utcnow()
-    })
+def get_player_names(message):
+    player_names_split_array = message.split(" vs ")
+    first_part_player_names_array = player_names_split_array[0].split(" ")
+    player_names = first_part_player_names_array[-1] + " vs " + player_names_split_array[1].split(" " or "\n(")[0]
+    return player_names
 
 def sanitize_tipmanager_messages(message):
     if "Poxa, que pena" in message:
         return ""
-    message = f"{message.replace('tipmanager', 'dataapi')}"
-    message = f"{message.split('———')[0]}"
-    if 'https://bot.' in message:
-        links = f"[Battle 8'](https://www.bet365.com/#/AC/B1/C1/D1002/E47578773/G938/) | [Adriatic 10'](https://www.bet365.com/#/AC/B1/C1/D1002/E90158949/G938/) | [GT 12'](https://www.bet365.com/#/AC/B1/C1/D1002/E71755872/G938/)"
-        message = f"{message.split('https://bot.')[0]}{links}"
+    match_time = message.split("cio: ")[1].split("\n")[0]
+    player_names = get_player_names(message)
+    line_array = message.split(" @")[0].split(" ")[-3:]
+    line = f"{line_array[0]} {line_array[2]}".replace("\n\n", "")
+    odd = message.split("@")[1].split("\n")[0]
+    strategy = message.split("gia: ")[1].split("\n\n")[0]
+    message = f"{match_time} - {player_names} - {line} @{odd}\n\n{strategy}"
     return message
 
 def prompt_for_chat_settings(client):
@@ -87,11 +71,6 @@ def prompt_for_chat_settings(client):
 
 load_dotenv()
 
-MONGO_URL = os.environ.get('MONGO_URL')
-
-mongo = MongoClient(MONGO_URL)
-db = mongo['data']
-
 TELEGRAM_API_ID = os.environ.get('TELEGRAM_API_ID')
 TELEGRAM_API_HASH = os.environ.get('TELEGRAM_API_HASH')
 
@@ -103,17 +82,26 @@ log_app_initialization(chat_settings)
 
 @client.on(events.NewMessage(chats=chat_settings['source_chats']))
 async def main(event):
-    try:
-        message = event.message.message
-        if chat_settings['should_sanitize'] == True:
-            message = sanitize_tipmanager_messages(message)
+    message = event.message.message
+    if chat_settings['should_sanitize'] == True:
+        message = sanitize_tipmanager_messages(message)
+    
+    print(message, chat_settings)
+    if event.message.media is None or isinstance(event.message.media, types.MessageMediaWebPage):
+        await client.send_message(entity=chat_settings['recipient_chat'], message=message, link_preview=False)
+    else:
+        return await client.send_file(entity=chat_settings['recipient_chat'], file=event.message.media, caption=message)
+    # try:
+    #     message = event.message.message
+    #     if chat_settings['should_sanitize'] == True:
+    #         message = sanitize_tipmanager_messages(message)
         
-        log_sent_message(message, chat_settings)
-        if event.message.media is None or isinstance(event.message.media, types.MessageMediaWebPage):
-            await client.send_message(entity=chat_settings['recipient_chat'], message=message, link_preview=False)
-        else:
-            return await client.send_file(entity=chat_settings['recipient_chat'], file=event.message.media, caption=message)
-    except Exception as e:
-        log_error(event.message.message, chat_settings, e)
+    #     print(message, chat_settings)
+    #     if event.message.media is None or isinstance(event.message.media, types.MessageMediaWebPage):
+    #         await client.send_message(entity=chat_settings['recipient_chat'], message=message, link_preview=False)
+    #     else:
+    #         return await client.send_file(entity=chat_settings['recipient_chat'], file=event.message.media, caption=message)
+    # except Exception as e:
+    #     print(event.message.message, chat_settings, e)
 
 client.run_until_disconnected()
