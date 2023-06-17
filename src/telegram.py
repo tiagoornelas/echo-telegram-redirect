@@ -24,13 +24,20 @@ def get_player_names(message):
     player_names = first_part_player_names_array[-1] + " vs " + player_names_split_array[1].split(" " or "\n(")[0]
     return player_names
 
+def get_tip_line(message):
+    if "Over" in message or "Under" in message:
+        line_array = message.split(" @")[0].split(" ")[-3:]
+        line = f"{line_array[0]} {line_array[2]}".replace("\n\n", "")
+        return line
+    else:
+        return message.split(" @")[0].split("\n\n")[-1]
+
 def sanitize_tipmanager_messages(message):
     if "Poxa, que pena" in message:
         return ""
     match_time = message.split("cio: ")[1].split("\n")[0]
     player_names = get_player_names(message)
-    line_array = message.split(" @")[0].split(" ")[-3:]
-    line = f"{line_array[0]} {line_array[2]}".replace("\n\n", "")
+    line = get_tip_line(message)
     odd = message.split("@")[1].split("\n")[0]
     strategy = message.split("gia: ")[1].split("\n\n")[0]
     message = f"{match_time} - {player_names} - {line} @{odd}\n\n{strategy}"
@@ -87,21 +94,17 @@ async def main(event):
         message = sanitize_tipmanager_messages(message)
     
     print(message, chat_settings)
-    if event.message.media is None or isinstance(event.message.media, types.MessageMediaWebPage):
-        await client.send_message(entity=chat_settings['recipient_chat'], message=message, link_preview=False)
-    else:
-        return await client.send_file(entity=chat_settings['recipient_chat'], file=event.message.media, caption=message)
-    # try:
-    #     message = event.message.message
-    #     if chat_settings['should_sanitize'] == True:
-    #         message = sanitize_tipmanager_messages(message)
+    try:
+        message = event.message.message
+        if chat_settings['should_sanitize'] == True:
+            message = sanitize_tipmanager_messages(message)
         
-    #     print(message, chat_settings)
-    #     if event.message.media is None or isinstance(event.message.media, types.MessageMediaWebPage):
-    #         await client.send_message(entity=chat_settings['recipient_chat'], message=message, link_preview=False)
-    #     else:
-    #         return await client.send_file(entity=chat_settings['recipient_chat'], file=event.message.media, caption=message)
-    # except Exception as e:
-    #     print(event.message.message, chat_settings, e)
+        print(message, chat_settings)
+        if event.message.media is None or isinstance(event.message.media, types.MessageMediaWebPage):
+            await client.send_message(entity=chat_settings['recipient_chat'], message=message, link_preview=False)
+        else:
+            return await client.send_file(entity=chat_settings['recipient_chat'], file=event.message.media, caption=message)
+    except Exception as e:
+        print(event.message.message, chat_settings, e)
 
 client.run_until_disconnected()
