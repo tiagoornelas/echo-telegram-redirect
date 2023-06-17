@@ -42,14 +42,30 @@ def log_error(message, chat_settings, error):
         'datetime': datetime.datetime.utcnow()
     })
 
+def get_player_names(message):
+    player_names_split_array = message.split(" vs ")
+    first_part_player_names_array = player_names_split_array[0].split(" ")
+    player_names = first_part_player_names_array[-1] + " vs " + player_names_split_array[1].split(" " or "\n(")[0]
+    return player_names
+
+def get_tip_line(message):
+    if "Over" in message or "Under" in message:
+        line_array = message.split(" @")[0].split(" ")[-3:]
+        line = f"{line_array[0]} {line_array[2]}".replace("\n\n", "")
+        return line
+    else:
+        return message.split(" @")[0].split("\n\n")[-1]
+
 def sanitize_tipmanager_messages(message):
     if "Poxa, que pena" in message:
         return ""
-    message = f"{message.replace('tipmanager', 'dataapi')}"
-    message = f"{message.split('———')[0]}"
-    if 'https://bot.' in message:
-        links = f"[Battle 8'](https://www.bet365.com/#/AC/B1/C1/D1002/E47578773/G938/) | [Adriatic 10'](https://www.bet365.com/#/AC/B1/C1/D1002/E90158949/G938/) | [GT 12'](https://www.bet365.com/#/AC/B1/C1/D1002/E71755872/G938/)"
-        message = f"{message.split('https://bot.')[0]}{links}"
+    match_time = message.split("cio: ")[1].split("\n")[0]
+    player_names = get_player_names(message)
+    line = get_tip_line(message)
+    odd = message.split("@")[1].split("\n")[0]
+    # strategy = message.split("gia: ")[1].split("\n\n")[0]
+    links = f"[Battle 8'](https://www.bet365.com/#/AC/B1/C1/D1002/E47578773/G938/) | [Adriatic 10'](https://www.bet365.com/#/AC/B1/C1/D1002/E90158949/G938/) | [GT 12'](https://www.bet365.com/#/AC/B1/C1/D1002/E71755872/G938/)"
+    message = f"{match_time} - {player_names} - {line} @{odd}\n\n{links}"
     return message
 
 def prompt_for_chat_settings(client):
