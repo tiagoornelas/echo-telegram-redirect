@@ -65,7 +65,7 @@ def sanitize_tipmanager_messages(message):
     odd = message.split("@")[1].split("\n")[0]
     # strategy = message.split("gia: ")[1].split("\n\n")[0]
     links = f"[Battle 8'](https://www.bet365.com/#/AC/B1/C1/D1002/E47578773/G938/) | [Adriatic 10'](https://www.bet365.com/#/AC/B1/C1/D1002/E90158949/G938/) | [GT 12'](https://www.bet365.com/#/AC/B1/C1/D1002/E71755872/G938/)"
-    message = f"{match_time} - {player_names} - {line} @{odd}\n\n{links}"
+    message = f"{player_names} às {match_time}\n\n{line} @{odd}\n\n{links}"
     return message
 
 def prompt_for_chat_settings(client):
