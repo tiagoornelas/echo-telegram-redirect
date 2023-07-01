@@ -25,17 +25,27 @@ def get_player_names(message):
     return player_names
 
 def get_tip_line(message):
-    if "Over" in message or "Under" in message:
-        line_array = message.split(" @")[0].split(" ")[-3:]
-        line = f"{line_array[0]} {line_array[2]}".replace("\n\n", "")
-        return line
+    if "PRE-LIVE" in message:
+        if "Over" in message or "Under" in message:
+            line_array = message.split(" @")[0].split(" ")[-3:]
+            line = f"{line_array[0]} {line_array[2]}".replace("\n\n", "")
+            return line
+        else:
+            return message.split(" @")[0].split("\n\n")[-1]
     else:
-        return message.split(" @")[0].split("\n\n")[-1]
+        return message.split(" @")[0].replace("Jogador - ", "")
+
+def get_match_time(message):
+    if "cio: " in message:
+        return message.split("cio: ")[1].split("\n")[0]
+    else:
+        return "Live"
+        
 
 def sanitize_tipmanager_messages(message):
     if "Poxa, que pena" in message:
         return ""
-    match_time = message.split("cio: ")[1].split("\n")[0]
+    match_time = get_match_time(message)
     player_names = get_player_names(message)
     line = get_tip_line(message)
     odd = message.split("@")[1].split("\n")[0]
