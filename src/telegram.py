@@ -96,18 +96,6 @@ def sanitize_tipmanager_messages_with_results(message):
     message = f"{player_names} às {match_time}\n\n{line} @{odd}\n\nPlacar{result}"
     return message
 
-def check_edited_message_equality(original, edited):
-    return original.split("@")[0] == edited.split("@")[0]
-
-def sanitize_tipmanager_messages_with_results(message):
-    match_time = get_match_time(message)
-    player_names = get_player_names(message)
-    line = get_tip_line(message)
-    odd = get_odd(message)
-    result = message.split("Resultado")[1].replace("\n", " ")
-    message = f"{player_names} às {match_time}\n\n{line} @{odd}\n\nPlacar{result}"
-    return message
-
 def prompt_for_chat_settings(client):
     chats = client.iter_dialogs()
     chat_dict = {}
