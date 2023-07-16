@@ -76,7 +76,6 @@ def sanitize_tipmanager_messages(message):
     if "Poxa, que pena" in message:
         return ""
     match_time = get_match_time(message)
-    match_time = get_match_time(message)
     player_names = get_player_names(message)
     line = get_tip_line(message)
     odd = get_odd(message)
@@ -93,7 +92,7 @@ def sanitize_tipmanager_messages_with_results(message):
     line = get_tip_line(message)
     odd = get_odd(message)
     result = message.split("Resultado")[1].replace("\n", " ")
-    message = f"{player_names} às {match_time}\n\n{line} @{odd}\n\nPlacar{result}"
+    message = f"{player_names} {match_time}\n\n{line} @{odd}\n\nPlacar{result}"
     return message
 
 def prompt_for_chat_settings(client):
