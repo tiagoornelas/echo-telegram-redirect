@@ -48,6 +48,12 @@ def get_player_names(message):
     player_names = first_part_player_names_array[-1] + " vs " + player_names_split_array[1].split(" " or "\n(")[0]
     return player_names
 
+def get_match_time(message):
+    return message.split("cio: ")[1].split("\n")[0]
+
+def get_odd(message):
+    return message.split("@")[1].split("\n")[0]
+
 def get_tip_line(message):
     if "PRE-LIVE" in message:
         if "Over" in message or "Under" in message:
@@ -70,11 +76,36 @@ def sanitize_tipmanager_messages(message):
     if "Poxa, que pena" in message:
         return ""
     match_time = get_match_time(message)
+    match_time = get_match_time(message)
     player_names = get_player_names(message)
     line = get_tip_line(message)
-    odd = message.split("@")[1].split("\n")[0]
+    odd = get_odd(message)
     links = f"[Battle 8'](https://www.bet365.com/#/AC/B1/C1/D1002/E47578773/G938/) | [Adriatic 10'](https://www.bet365.com/#/AC/B1/C1/D1002/E90158949/G938/) | [GT 12'](https://www.bet365.com/#/AC/B1/C1/D1002/E71755872/G938/)"
     message = f"{player_names} {match_time}\n\n{line} @{odd}\n\n{links}"
+    return message
+
+def check_edited_message_equality(original, edited):
+    return original.split("@")[0] == edited.split("@")[0]
+
+def sanitize_tipmanager_messages_with_results(message):
+    match_time = get_match_time(message)
+    player_names = get_player_names(message)
+    line = get_tip_line(message)
+    odd = get_odd(message)
+    result = message.split("Resultado")[1].replace("\n", " ")
+    message = f"{player_names} às {match_time}\n\n{line} @{odd}\n\nPlacar{result}"
+    return message
+
+def check_edited_message_equality(original, edited):
+    return original.split("@")[0] == edited.split("@")[0]
+
+def sanitize_tipmanager_messages_with_results(message):
+    match_time = get_match_time(message)
+    player_names = get_player_names(message)
+    line = get_tip_line(message)
+    odd = get_odd(message)
+    result = message.split("Resultado")[1].replace("\n", " ")
+    message = f"{player_names} às {match_time}\n\n{line} @{odd}\n\nPlacar{result}"
     return message
 
 def prompt_for_chat_settings(client):
@@ -127,7 +158,7 @@ chat_settings = prompt_for_chat_settings(client)
 log_app_initialization(chat_settings)
 
 @client.on(events.NewMessage(chats=chat_settings['source_chats']))
-async def main(event):
+async def handle_new_message(event):
     try:
         message = event.message.message
         if chat_settings['should_sanitize'] == True:
@@ -140,5 +171,17 @@ async def main(event):
             return await client.send_file(entity=chat_settings['recipient_chat'], file=event.message.media, caption=message)
     except Exception as e:
         log_error(event.message.message, chat_settings, e)
+
+@client.on(events.MessageEdited(chats=chat_settings['source_chats']))
+async def handle_message_edit(event):
+    if chat_settings['should_sanitize'] == True:
+        if "Resultado" in event.message.message:
+            sanitized_edited_message = sanitize_tipmanager_messages(event.message.message)
+            async for message in client.iter_messages(chat_settings['recipient_chat']):
+                found_message = check_edited_message_equality(message.message, sanitized_edited_message)
+                if found_message:
+                    sanitized_found_message = sanitize_tipmanager_messages_with_results(event.message.message)
+                    await client.edit_message(chat_settings['recipient_chat'], message.id, sanitized_found_message)
+                    break
 
 client.run_until_disconnected()
