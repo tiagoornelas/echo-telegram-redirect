@@ -42,6 +42,20 @@ def log_error(message, chat_settings, error):
         'datetime': datetime.datetime.utcnow()
     })
 
+def should_block_strategy_by_black_list(message):
+    black_list = ["Next Goal"]
+    
+    try:
+        splitted_message = message.split("Estrat")[1].split("gia: ")[1].split("\n")[0]
+    except IndexError:
+        return False
+    
+    if any(item in splitted_message for item in black_list):
+        return True
+    else:
+        return False
+
+
 def get_player_names(message):
     player_names_split_array = message.split(" vs ")
     first_part_player_names_array = player_names_split_array[0].split(" ")
@@ -73,8 +87,10 @@ def get_match_time(message):
         return "ao-vivo!"
 
 def sanitize_tipmanager_messages(message):
-    if "Poxa, que pena" in message:
+    should_block = should_block_strategy_by_black_list(message)
+    if "Poxa, que pena" in message or should_block == True:
         return ""
+
     match_time = get_match_time(message)
     player_names = get_player_names(message)
     line = get_tip_line(message)
