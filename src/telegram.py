@@ -79,10 +79,14 @@ def get_tip_line(message):
     else:
         return message.split(" @")[0].replace("Jogador - ", "")
 
+def sanitize_timezone_string(message):
+    return message.replace("(America/Sao_Paulo)", "")
+
 def get_match_time(message):
     if "cio: " in message:
         splited_string = message.split("cio: ")[1].split("\n")[0]
-        return f"às {splited_string}"
+        without_timezone_message = sanitize_timezone_string(splited_string)
+        return f"às {without_timezone_message}"
     else:
         return "ao-vivo!"
 
