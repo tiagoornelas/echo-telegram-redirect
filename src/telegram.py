@@ -115,7 +115,7 @@ def prompt_for_chat_settings(client):
 
     answers = inquirer.prompt(questions)
     should_sanitize = answers['should_sanitize']
-    should_send_delayed = answers['should_send_delayed']
+    should_send_delayed = False
 
     source_chats_titles = answers['source']
     recipient_chat_title = answers['recipient']
