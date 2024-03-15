@@ -126,9 +126,9 @@ def prompt_for_chat_settings(client):
 
     recipient_chat = chat_dict[recipient_chat_title]
 
-    delayed_recipient_chat = None
-    delayed_recipient_chat_title = None
-    delayed_recipient_delay_time = None
+    # delayed_recipient_chat = None
+    # delayed_recipient_chat_title = None
+    # delayed_recipient_delay_time = None
 
     if should_send_delayed :
         delayed_questions = [
@@ -139,10 +139,10 @@ def prompt_for_chat_settings(client):
         ]
         delayed_answers = answers = inquirer.prompt(delayed_questions)
         delayed_recipient_chat_title = delayed_answers['delayed_recipient']
-        delayed_recipient_delay_time = int(delayed_answers['delay_time'])
-        delayed_recipient_delay_chance = int(delayed_answers['delay_chance']) * 0.01
-        delayed_recipient_vip_link = delayed_answers['vip_link']
-        delayed_recipient_chat = chat_dict[delayed_recipient_chat_title]
+        # delayed_recipient_delay_time = int(delayed_answers['delay_time'])
+        # delayed_recipient_delay_chance = int(delayed_answers['delay_chance']) * 0.01
+        # delayed_recipient_vip_link = delayed_answers['vip_link']
+        # delayed_recipient_chat = chat_dict[delayed_recipient_chat_title]
 
     return {
         'source_chats': source_chats,
@@ -150,12 +150,12 @@ def prompt_for_chat_settings(client):
         'recipient_chat': recipient_chat,
         'recipient_chat_title': recipient_chat_title,
         'should_sanitize': should_sanitize,
-        'should_send_delayed': should_send_delayed,
-        'delayed_recipient_chat': delayed_recipient_chat,
-        'delayed_recipient_chat_title': delayed_recipient_chat_title,
-        'delayed_recipient_delay_time': delayed_recipient_delay_time,
-        'delayed_recipient_delay_chance': delayed_recipient_delay_chance,
-        'delayed_recipient_vip_link': delayed_recipient_vip_link
+        # 'should_send_delayed': should_send_delayed,
+        # 'delayed_recipient_chat': delayed_recipient_chat,
+        # 'delayed_recipient_chat_title': delayed_recipient_chat_title,
+        # 'delayed_recipient_delay_time': delayed_recipient_delay_time,
+        # 'delayed_recipient_delay_chance': delayed_recipient_delay_chance,
+        # 'delayed_recipient_vip_link': delayed_recipient_vip_link
     }
 
 async def send_delayed_message(message, chat_settings):
