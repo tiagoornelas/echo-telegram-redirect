@@ -196,7 +196,7 @@ async def handle_new_message(event):
 
 @client.on(events.MessageEdited(chats=chat_settings['source_chats']))
 async def handle_message_edit(event):
-    if chat_settings['should_sanitize'] == True:
+    if chat_settings['should_sanitize']:
         if "Resultado" in event.message.message:
             sanitized_edited_message = sanitize_tipmanager_messages(event.message.message)
             
@@ -213,5 +213,11 @@ async def handle_message_edit(event):
                     sanitized_found_message = sanitize_tipmanager_messages_with_results(event.message.message)
                     await client.edit_message(chat_settings['delayed_recipient_chat'], message.id, sanitized_found_message)
                     break
+    else:
+        async for message in client.iter_messages(chat_settings['recipient_chat']):
+            found_message = check_edited_message_equality(message.message, event.message.message)
+            if found_message:
+                await client.edit_message(chat_settings['recipient_chat'], message.id, event.message.message)
+                break
 
 client.run_until_disconnected()
