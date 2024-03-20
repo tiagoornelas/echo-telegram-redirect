@@ -163,8 +163,9 @@ async def send_delayed_message(message, chat_settings):
     should_send_delayed_message = random_number >= chat_settings['delayed_recipient_delay_chance']
     if should_send_delayed_message:
         delayed_additional_message = message + '\n\nEsta mensagem foi enviada com ' + str(chat_settings['delayed_recipient_delay_time']) + ' segundos de atraso.\n\n[Assine o VIP](' + chat_settings['delayed_recipient_vip_link'] + ') para receber em tempo real.'
+        referral_link = delayed_additional_message + '\n\nCrie sua conta na [EstrelaBet](https://go.aff.estrelabetpartners.com/srnt97bv), 100% de bônus em E-Sports no primeiro depósito até R$500, com o cupom ESPORTS2024'
         await asyncio.sleep(chat_settings['delayed_recipient_delay_time'])
-        await client.send_message(entity=chat_settings['delayed_recipient_chat'], message=delayed_additional_message, link_preview=False)
+        await client.send_message(entity=chat_settings['delayed_recipient_chat'], message=referral_link, link_preview=False)
 
 load_dotenv()
 
